@@ -12,7 +12,8 @@ const helloWorldPath string = "printf"
 // pathHelloWorld prints out hello world
 func pathHelloWorld(b *backend) *framework.Path {
 	return &framework.Path{
-		Pattern: framework.MatchAllRegex("path"),
+		Pattern: helloWorldPath + "$",
+
 		Fields: map[string]*framework.FieldSchema{
 			"name": {
 				Type:        framework.TypeString,
@@ -20,7 +21,9 @@ func pathHelloWorld(b *backend) *framework.Path {
 			},
 		},
 		Callbacks: map[logical.Operation]framework.OperationFunc{
+			logical.CreateOperation: b.pathHelloWorldUpdate,
 			logical.UpdateOperation: b.pathHelloWorldUpdate,
+			logical.ReadOperation:   b.pathHelloWorldRead,
 		},
 
 		HelpSynopsis:    queryHelpSyn,
@@ -34,6 +37,17 @@ func (b *backend) pathHelloWorldUpdate(ctx context.Context, req *logical.Request
 	resp := &logical.Response{
 		Data: map[string]interface{}{
 			"helloworld": n,
+		},
+	}
+	return resp, nil
+}
+
+func (b *backend) pathHelloWorldRead(ctx context.Context, req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
+	// n := data.Get("name").(string)
+
+	resp := &logical.Response{
+		Data: map[string]interface{}{
+			"hello": "world",
 		},
 	}
 	return resp, nil
