@@ -37,6 +37,8 @@ func testHelloWorldRead(t *testing.T) logicaltest.TestStep {
 		Operation: logical.ReadOperation,
 		Path:      "printf",
 		Check: func(resp *logical.Response) error {
+			x := resp
+			log.Printf("[WARN] received: %v", x)
 			var d struct {
 				Content string `mapstructure:"content"`
 			}

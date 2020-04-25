@@ -41,12 +41,29 @@ func (b *backend) pathHelloWorldUpdate(ctx context.Context, req *logical.Request
 }
 
 func (b *backend) pathHelloWorldRead(ctx context.Context, req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
-	// n := data.Get("name").(string)
+	//n := data.Get("name").(string)
 	//panic(nil)
-	w := "world"
+	//m := map[string]string{		"hello": "world",	}
+
+	type Family struct {
+		LastName string
+	}
+	type Location struct {
+		City string
+	}
+	type Person struct {
+		Family    `mapstructure:",squash"`
+		Location  `mapstructure:",squash"`
+		FirstName string
+	}
+
+	x := Person{
+		FirstName: "Guy",
+	}
+
 	resp := &logical.Response{
 		Data: map[string]interface{}{
-			"hello": w,
+			"FirstName": x.FirstName,
 		},
 	}
 	return resp, nil
