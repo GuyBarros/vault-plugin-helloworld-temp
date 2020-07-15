@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-TOOL=vault-plugin-helloworld-temp
+TOOL=vault-plugin-hello-world
 #
 # This script builds the application from source for multiple platforms.
 set -e

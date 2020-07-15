@@ -3,7 +3,6 @@ package helloworld
 import (
 	"context"
 	"fmt"
-	"log"
 	"os"
 	"testing"
 
@@ -26,29 +25,53 @@ func TestBackend(t *testing.T) {
 	logicaltest.Test(t, logicaltest.TestCase{
 		LogicalBackend: b,
 		Steps: []logicaltest.TestStep{
-			testHelloWorldRead(t),
+			//testAccStepWorldRead(t),
+			testAccStepWorldReadName(t, "HashiCorp"),
 		},
 	})
 
 }
 
-func testHelloWorldRead(t *testing.T) logicaltest.TestStep {
+func testAccStepWorldRead(t *testing.T) logicaltest.TestStep {
 	return logicaltest.TestStep{
 		Operation: logical.ReadOperation,
-		Path:      "printf",
+		Path:      "world",
 		Check: func(resp *logical.Response) error {
-			x := resp
-			log.Printf("[WARN] received: %v", x)
 			var d struct {
-				Content string `mapstructure:"content"`
+				Hello string `mapstructure:"hello"`
 			}
 			if err := mapstructure.Decode(resp.Data, &d); err != nil {
 				return err
 			}
-			if len(d.Content) == 0 {
-				return fmt.Errorf("Error retrieving content")
+
+			n := "World"
+			if d.Hello != n {
+				return fmt.Errorf("got %v: want %v", d.Hello, n)
 			}
-			log.Printf("[WARN] Retrieved credentials: %v", d)
+
+			return nil
+		},
+	}
+}
+
+func testAccStepWorldReadName(t *testing.T, n string) logicaltest.TestStep {
+	return logicaltest.TestStep{
+		Operation: logical.ReadOperation,
+		Path:      "world",
+		Data: map[string]interface{}{
+			"name": n,
+		},
+		Check: func(resp *logical.Response) error {
+			var d struct {
+				Hello string `mapstructure:"hello"`
+			}
+			if err := mapstructure.Decode(resp.Data, &d); err != nil {
+				return err
+			}
+
+			if d.Hello != n {
+				return fmt.Errorf("got %v: want %v", d.Hello, n)
+			}
 
 			return nil
 		},

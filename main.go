@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	helloworld "github.com/GuyBarros/vault-plugin-helloworld-temp/plugin"
+	helloworld "github.com/guybarros/vault-plugin-hello-world/plugin"
 	"github.com/hashicorp/vault/api"
 	"github.com/hashicorp/vault/sdk/plugin"
 )
